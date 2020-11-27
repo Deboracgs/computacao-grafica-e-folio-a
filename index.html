@@ -6,15 +6,111 @@
             html, * {
                 margin: 0;
             }
+            #lineMp {
+                width: 200px;
+                height: 200px;
+            }
+            .row{
+                display: flex;
+                flex-direction: row;
+            }
+            .col{
+                display: flex;
+                flex-direction: column;
+            }
         </style>
     </head>
     <body>
+        <div class="row">
+            <div class="col">
+                <label>x1</label>
+                <input type="number" id="x1" />
+            </div>
+            <div class="col">
+                <label>y1</label>
+                <input type="number" id="y1" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label>x2</label>
+                <input type="number" id="x2" />
+            </div>
+            <div class="col">
+                <label>y2</label>
+                <input type="number" id="y2" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+               <button id="buttonRender">render</button>
+            </div>
+            <div class="col">
+                <button id="buttonReset">reset</button>
+             </div>
+        </div>
 
+        <div id="lineMp"></div>
+        <div id="container"></div>
+        <script type="module">
+            
+        </script>
         <script type="module" src="lineMP.js"></script>
         <script type="module">
-           
-            window.lineMP([10, 0],[30, 2])
+            import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r123/three.module.min.js';
             
+    
+            const init = ((x1 = 0, x2 = 0, y1 = 0, y2 = 0) => {
+                var container = document.getElementById('container');
+                const renderer = new THREE.WebGLRenderer();
+                renderer.setSize( 400,400 );
+                container.appendChild( renderer.domElement );
+                const scene = new THREE.Scene();
+                
+                const camera = new THREE.PerspectiveCamera( 60, 400 / 400, 1, 200 );
+                camera.position.set( 1,100,0 );
+                camera.lookAt(scene.position)
+
+                var fatPixelSize = 30;
+                var centerRef = ([-21, 0],[21, 0])
+                var size = 21, step =1;
+                var geometry = new THREE.Geometry();
+                var material = new THREE.LineBasicMaterial({ color: "#fff", linewidth: fatPixelSize});
+
+                for (let index = -size; index <= size; index += step) {
+                    geometry.vertices.push(new THREE.Vector3(- size, -0.04, index));
+                    geometry.vertices.push(new THREE.Vector3(size, -0.04, index));
+                    geometry.vertices.push(new THREE.Vector3(index, -0.04, -size));
+                    geometry.vertices.push(new THREE.Vector3(index, -0.04, size));
+                }
+            
+                var line = new THREE.LineSegments(geometry, material);
+                var lineMP = window.lineMP([x1, y1],[x2, y2])
+                var lineMP2 = window.lineMP([60 , -40],[30, 50])
+                scene.add(line)
+                scene.add(lineMP)
+                scene.add(lineMP2)
+                
+                
+                renderer.render( scene, camera );
+            })
+           
+            init();
+
+            const buttonReset = document.getElementById('buttonReset');
+            const buttonRender = document.getElementById('buttonRender');
+
+            buttonReset.onclick = (() => {
+                init()
+            })
+            buttonRender.onclick = (() => {
+                const x1 = document.getElementById("x1").value;
+                const x2 = document.getElementById("x2").value;
+                const y1 = document.getElementById("y1").value;
+                const y2 = document.getElementById("y2").value;
+
+                init(x1,x2,y1,y2)
+            })
         </script>
     </body>
 </html>
