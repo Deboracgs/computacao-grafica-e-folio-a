@@ -49,12 +49,8 @@
                 <button id="buttonReset">reset</button>
              </div>
         </div>
-
-        <div id="lineMp"></div>
         <div id="container"></div>
-        <script type="module">
-            
-        </script>
+
         <script type="module" src="lineMP.js"></script>
         <script type="module">
             import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r123/three.module.min.js';
@@ -103,6 +99,7 @@
             buttonReset.onclick = (() => {
                 init()
             })
+
             buttonRender.onclick = (() => {
                 const x1 = document.getElementById("x1").value;
                 const x2 = document.getElementById("x2").value;
